@@ -14,11 +14,22 @@ test("manifest exposes a persistent service", () => {
   assert.equal(manifest.entryPoints.service, "Service.qml");
 });
 
-test("single-window regular workspaces have no gaps or borders", () => {
-  assert.match(service, /workspace = "w\[v1\]s\[false\]"/);
+test("single-tiled-window regular workspaces have no gaps or borders", () => {
+  assert.match(service, /local selector = "w\[tv1\]s\[false\]"/);
+  assert.match(service, /workspace = selector/);
   assert.match(service, /gaps_out = 0/);
   assert.match(service, /gaps_in = 0/);
   assert.match(service, /no_border = true/);
+});
+
+test("floating helper windows do not affect the smart-gaps match", () => {
+  assert.doesNotMatch(service, /w\[v1\]s\[false\]/);
+});
+
+test("a changed selector replaces the cached runtime rule", () => {
+  assert.match(service, /omarchy_smart_gaps_rule_selector ~= selector/);
+  assert.match(service, /omarchy_smart_gaps_rule:set_enabled\(false\)/);
+  assert.match(service, /omarchy_smart_gaps_rule = nil/);
 });
 
 test("the runtime rule is disabled on unload and restored after config reload", () => {

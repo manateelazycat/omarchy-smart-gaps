@@ -15,7 +15,7 @@ Item {
   property var screensaverWindows: ({})
 
   readonly property string screensaverClass: "org.omarchy.screensaver"
-  readonly property string enableRuleCode: 'if _G.omarchy_smart_gaps_rule then _G.omarchy_smart_gaps_rule:set_enabled(true) else _G.omarchy_smart_gaps_rule = hl.workspace_rule({ workspace = "w[v1]s[false]", gaps_out = 0, gaps_in = 0, no_border = true }) end'
+  readonly property string enableRuleCode: 'local selector = "w[tv1]s[false]"; if _G.omarchy_smart_gaps_rule and _G.omarchy_smart_gaps_rule_selector ~= selector then _G.omarchy_smart_gaps_rule:set_enabled(false); _G.omarchy_smart_gaps_rule = nil end; if _G.omarchy_smart_gaps_rule then _G.omarchy_smart_gaps_rule:set_enabled(true) else _G.omarchy_smart_gaps_rule = hl.workspace_rule({ workspace = selector, gaps_out = 0, gaps_in = 0, no_border = true }) end; _G.omarchy_smart_gaps_rule_selector = selector'
   readonly property string disableRuleCode: 'if _G.omarchy_smart_gaps_rule then _G.omarchy_smart_gaps_rule:set_enabled(false) end'
 
   function applyRule() {
@@ -82,7 +82,7 @@ Item {
   function statusJson() {
     return JSON.stringify({
       applied: root.applied,
-      selector: "w[v1]s[false]",
+      selector: "w[tv1]s[false]",
       gapsIn: 0,
       gapsOut: 0,
       borders: false
