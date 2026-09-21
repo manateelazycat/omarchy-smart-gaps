@@ -10,6 +10,17 @@ omarchy plugin add https://github.com/manateelazycat/omarchy-smart-gaps.git --en
 
 No additional configuration is required.
 
+## Remove
+
+```bash
+omarchy plugin remove io.github.manateelazycat.smart-gaps
+```
+
+## Requirements
+
+- Omarchy with the Quickshell plugin system
+- Hyprland 0.56 or newer with Lua configuration support
+
 ## How it works
 
 The plugin installs a runtime Hyprland workspace rule for `w[v1]s[false]`. Hyprland updates the match automatically as windows open, close, or move between workspaces. The rule is disabled when the plugin unloads, and reapplied after a Hyprland configuration reload.
