@@ -1,5 +1,7 @@
 # Omarchy Smart Gaps
 
+https://github.com/user-attachments/assets/171da180-7709-40d9-ad21-b06e21bd89bb
+
 An [Omarchy](https://omarchy.org/) plugin that automatically removes the inner and outer gaps and hides the border when a regular workspace has exactly one visible window. The normal gaps and border return as soon as the workspace contains multiple windows.
 
 ## Install
