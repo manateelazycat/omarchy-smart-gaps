@@ -23,7 +23,7 @@ omarchy plugin remove io.github.manateelazycat.smart-gaps
 
 ## How it works
 
-The plugin installs a runtime Hyprland workspace rule for `w[v1]s[false]`. Hyprland updates the match automatically as windows open, close, or move between workspaces. The rule is disabled when the plugin unloads, and reapplied after a Hyprland configuration reload.
+The plugin installs a runtime Hyprland workspace rule for `w[v1]s[false]`. Hyprland updates the match automatically as windows open, close, or move between workspaces. The rule is disabled when the plugin unloads, and reapplied after a Hyprland configuration reload. It is also refreshed after Omarchy's screensaver closes so the single-window layout is restored correctly after unlocking.
 
 ## License
 

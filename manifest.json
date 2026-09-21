@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "io.github.manateelazycat.smart-gaps",
   "name": "Omarchy Smart Gaps",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "ManateeLazyCat",
   "license": "GPL-3.0-only",
   "description": "Automatically removes gaps and borders on single-window workspaces.",

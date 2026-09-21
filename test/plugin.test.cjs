@@ -26,3 +26,11 @@ test("the runtime rule is disabled on unload and restored after config reload", 
   assert.match(service, /configreloaded/);
   assert.match(service, /applyTimer\.restart\(\)/);
 });
+
+test("the rule is refreshed after the Omarchy screensaver closes", () => {
+  assert.match(service, /screensaverClass:\s*"org\.omarchy\.screensaver"/);
+  assert.match(service, /name === "openwindow"/);
+  assert.match(service, /name === "closewindow"/);
+  assert.match(service, /forgetScreensaver\(closed\[0\]\)/);
+  assert.match(service, /applyTimer\.restart\(\)/);
+});

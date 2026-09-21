@@ -12,7 +12,9 @@ Item {
   property bool applied: false
   property bool applyPending: false
   property bool unloading: false
+  property var screensaverWindows: ({})
 
+  readonly property string screensaverClass: "org.omarchy.screensaver"
   readonly property string enableRuleCode: 'if _G.omarchy_smart_gaps_rule then _G.omarchy_smart_gaps_rule:set_enabled(true) else _G.omarchy_smart_gaps_rule = hl.workspace_rule({ workspace = "w[v1]s[false]", gaps_out = 0, gaps_in = 0, no_border = true }) end'
   readonly property string disableRuleCode: 'if _G.omarchy_smart_gaps_rule then _G.omarchy_smart_gaps_rule:set_enabled(false) end'
 
@@ -28,6 +30,53 @@ Item {
     root.applyPending = false
     applyProcess.command = ["hyprctl", "eval", root.enableRuleCode]
     applyProcess.running = true
+  }
+
+  function eventParts(event, count) {
+    try {
+      if (event && event.parse)
+        return event.parse(count)
+    } catch (error) {
+    }
+
+    return String(event?.data ?? "").split(",")
+  }
+
+  function rememberScreensaver(address) {
+    var key = String(address || "")
+    if (key === "")
+      return
+
+    var next = Object.assign({}, root.screensaverWindows)
+    next[key] = true
+    root.screensaverWindows = next
+  }
+
+  function forgetScreensaver(address) {
+    var key = String(address || "")
+    if (!root.screensaverWindows[key])
+      return false
+
+    var next = Object.assign({}, root.screensaverWindows)
+    delete next[key]
+    root.screensaverWindows = next
+    return true
+  }
+
+  function handleHyprlandEvent(event) {
+    var name = String(event?.name ?? "").toLowerCase()
+
+    if (name === "openwindow") {
+      var opened = eventParts(event, 4)
+      if (String(opened[2] || "") === root.screensaverClass)
+        rememberScreensaver(opened[0])
+    } else if (name === "closewindow") {
+      var closed = eventParts(event, 1)
+      if (forgetScreensaver(closed[0]))
+        applyTimer.restart()
+    } else if (name === "configreloaded") {
+      applyTimer.restart()
+    }
   }
 
   function statusJson() {
@@ -74,10 +123,7 @@ Item {
   Connections {
     target: Hyprland
 
-    function onRawEvent(event) {
-      if (String(event?.name ?? "").toLowerCase() === "configreloaded")
-        applyTimer.restart()
-    }
+    function onRawEvent(event) { root.handleHyprlandEvent(event) }
   }
 
   IpcHandler {
